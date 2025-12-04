@@ -1,0 +1,1 @@
+docker run -p 127.0.0.1:9998:9998 apache/tika:latest-full

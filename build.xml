@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hocr2tei" default="transform" basedir=".">
+    
+    <description>Transform hOCR files to TEI using XSLT</description>
+    
+    <!-- Properties -->
+    <property name="output.dir" value="${basedir}/output"/>
+    <property name="tei.dir" value="${basedir}/tei"/>
+    <property name="xsl.file" value="${basedir}/xsl/hocr2tei.xsl"/>
+    
+    <!-- Saxon classpath -->
+    <path id="saxon.classpath">
+        <pathelement location="${basedir}/saxon/saxon9he.jar"/>
+    </path>
+    
+    <!-- Main transformation target -->
+    <target name="transform" description="Transform all hOCR files to TEI">
+        <mkdir dir="${tei.dir}"/>
+        
+        <!-- Find all .hocr files and transform them -->
+        <record name="error.txt" action="start" append="true"/>
+        <xslt basedir="${output.dir}" 
+              destdir="${tei.dir}" 
+              style="${xsl.file}" 
+              includes="**/*.hocr" 
+              extension=".xml"
+              classpathref="saxon.classpath"
+              failonerror="false">
+            <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+        </xslt>
+        <record name="error.txt" action="stop"/>
+        
+        <echo message="Transformation complete!"/>
+    </target>
+    
+</project>
